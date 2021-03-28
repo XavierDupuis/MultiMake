@@ -64,7 +64,8 @@ help:
 	@echo Usage : make [tag]
 	@echo "   "[no_tag]"  ": make all
 	@echo "   "all"       ": make all
-	@echo "   "run"       ": execute $(EXEC)
+	@echo "   "run"       ": execute $(BUILD_DIR)/$(EXEC)
+	@echo "   "test"      ": execute $(BUILD_DIR)/test.$(EXEC)
 	@echo "   "clean"     ": remove /$(BIN_DIR) and /$(BUILD_DIR)directories
 	@echo "   "help"      ": show help page
 	@echo "   "printvars" ": print makefile variables
