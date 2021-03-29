@@ -23,7 +23,7 @@ EXEC=program.out
 SOURCES=$(sort $(shell find $(SRC_DIR) -name '*.cpp' -o -name '*.h'))
 OBJECTS=$(SOURCES:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
 
-TEST_SOURCES=$(sort $(shell find $(TEST_DIR)/$(SRC_DIR) -name '*.cpp'))
+TEST_SOURCES=$(sort $(shell find $(TEST_DIR)/$(SRC_DIR) -name '*.cpp' -o -name '*.h'))
 TEST_OBJECTS=$(TEST_SOURCES:$(TEST_DIR)/$(SRC_DIR)/%.cpp=$(TEST_DIR)/$(BIN_DIR)/%.o)
 
 
