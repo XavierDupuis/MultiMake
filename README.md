@@ -1,6 +1,3 @@
-# MultiMake
-C/C++ Windows development makefiles rules for multi projects environment
-
 <div style="text-align: center;"><img src="assets/title.png"></div>
 
 DESCRIPTION
