@@ -52,6 +52,11 @@ PROJECT HIERARCHY
 MULTIMAKE (WINDOWS ONLY)
 ====================
 
+PROJECTS.TXT
+--------------------
+Add sub-project folder names one on each line in this file
+
+
 SYNTAX (WINDOWS CMD)
 --------------------
 ```
