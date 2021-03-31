@@ -6,9 +6,9 @@ REM @file Multimake.bat
 REM @author XAVIER DUPUIS (xavier0978@hotmail.fr)
 REM @brief 
 REM @version 0.1
-REM @date 2020-03-30
+REM @date 2021-03-30
 REM 
-REM @copyright Copyright (c) 2020
+REM @copyright Copyright (c) 2021
 REM ***********************************************
 
 setLocal EnableDelayedExpansion 
