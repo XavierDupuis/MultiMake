@@ -5,8 +5,8 @@ REM ***********************************************
 REM @file Multimake.bat
 REM @author XAVIER DUPUIS (xavier0978@hotmail.fr)
 REM @brief 
-REM @version 0.1
-REM @date 2021-03-30
+REM @version 0.2
+REM @date 2020-03-30
 REM 
 REM @copyright Copyright (c) 2021
 REM ***********************************************
@@ -38,9 +38,9 @@ if exist "projects.txt" (
             set PROJECTS[!i!]=%%a
         )
     )
-    set NProjects=!i!
+    set /A NProjects=!i!
 )
-set NProjects=1
+IF !NProjects!==0 (set NProjects=1)
 IF NOT exist !PROJECTS[1]! (echo    NO PROJECT FOUND && goto :END)
 
 REM DISPATCHING
@@ -69,6 +69,7 @@ cd %OUTPUT_DIR%
 IF NOT exist %OUTPUT_RUN% (md %OUTPUT_RUN%)
 cd ..
 for /L %%i in (1,1,!NProjects!) do (
+    echo    RUN !PROJECTS[%%i]!
     cd !PROJECTS[%%i]!
     call make run > ../%OUTPUT_DIR%/%OUTPUT_RUN%/!PROJECTS[%%i]!.txt
     cd ..
@@ -81,6 +82,7 @@ cd %OUTPUT_DIR%
 IF NOT exist %OUTPUT_TEST% (md %OUTPUT_TEST%)
 cd ..
 for /L %%i in (1,1,!NProjects!) do (
+    echo    TEST !PROJECTS[%%i]!
     cd !PROJECTS[%%i]!
     call make test > ../%OUTPUT_DIR%/%OUTPUT_TEST%/!PROJECTS[%%i]!.txt
     cd ..
@@ -89,8 +91,9 @@ goto :EOF
 
 :CLEAN
 for /L %%i in (1,1,!NProjects!) do (
+    echo    CLEAN !PROJECTS[%%i]!
     cd !PROJECTS[%%i]!
-    call make clean
+    call make clean > NUL
     cd ..
 )
 IF exist %OUTPUT_DIR% (rmdir %OUTPUT_DIR% /q /s)
