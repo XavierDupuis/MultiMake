@@ -16,16 +16,17 @@ LDFLAGS=-lm
 
 SRC_DIR=src
 BIN_DIR=bin
+DEP_DIR=dep
 BUILD_DIR=build
 TEST_DIR=test
 EXEC=program.out
 
-SOURCES=$(sort $(shell find $(SRC_DIR) -name '*.cpp' -o -name '*.h'))
+SOURCES=$(sort $(shell find $(SRC_DIR) -name '*.cpp'))
 OBJECTS=$(SOURCES:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
+DEPENDANCIES := $(OBJECTS:.o=.d)
 
-TEST_SOURCES=$(sort $(shell find $(TEST_DIR)/$(SRC_DIR) -name '*.cpp' -o -name '*.h'))
+TEST_SOURCES=$(sort $(shell find $(TEST_DIR)/$(SRC_DIR) -name '*.cpp'))
 TEST_OBJECTS=$(TEST_SOURCES:$(TEST_DIR)/$(SRC_DIR)/%.cpp=$(TEST_DIR)/$(BIN_DIR)/%.o)
-
 
 
 all: $(BUILD_DIR)/$(EXEC) $(SOURCES) 
@@ -34,11 +35,13 @@ $(BUILD_DIR)/$(EXEC): $(OBJECTS)
 	mkdir -p $(BUILD_DIR)
 	$(CC) -o $@ $^ $(LDFLAGS) $(CCFLAGS)
 
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(BIN_DIR)
+	mkdir -p $(DEP_DIR)
 	$(CC) -o $@ -c $< $(CFLAGS) $(CCFLAGS)
+	$(CC) -MM $(CFLAGS) $(SRC_DIR)/$*.cpp > $(DEP_DIR)/$*.d
 
--include *.d
+-include $(DEP_DIR)/*.d
 
 run: all
 	./$(BUILD_DIR)/$(EXEC)
@@ -53,12 +56,11 @@ $(TEST_DIR)/$(BUILD_DIR)/test.$(EXEC): $(TEST_OBJECTS) $(filter-out src/main.cpp
 $(TEST_DIR)/$(BIN_DIR)/%.o: $(TEST_DIR)/$(SRC_DIR)/%.cpp
 	mkdir -p $(TEST_DIR)/$(BIN_DIR)
 	$(CC) -o $@ -c $< $(CFLAGS) $(CCFLAGS)
+	$(CC) -MM $(CFLAGS) $(TEST_DIR)/$(SRC_DIR)/$*.cpp > $(TEST_DIR)/$(DEP_DIR)/$*.d
 
 clean:
-	rm -rf $(BUILD_DIR)
-	rm -rf $(BIN_DIR)
-	rm -rf $(TEST_DIR)/$(BIN_DIR)
-	rm -rf $(TEST_DIR)/$(BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(BIN_DIR) $(DEP_DIR)
+	rm -rf $(TEST_DIR)/$(BIN_DIR) $(TEST_DIR)/$(BUILD_DIR) $(TEST_DIR)/$(DEP_DIR)
 
 help:
 	@echo Usage : make [tag]
@@ -79,6 +81,8 @@ printvars:
 	@echo "   "SRC_DIR"         ": $(SRC_DIR)
 	@echo "   "BIN_DIR"         ": $(BIN_DIR)
 	@echo "   "BUILD_DIR"       ": $(BUILD_DIR)
+	@echo "   "DEP_DIR"         ": $(DEP_DIR)
+	@echo "   "DEPENDANCIES"    ": $(DEPENDANCIES)
 	@echo "   "EXEC"            ": $(EXEC)
 	@echo "   "OBJECTS"         ": $(OBJECTS)
 	@echo "   "TEST_OBJECTS"    ": $(TEST_OBJECTS)
