@@ -129,9 +129,11 @@ goto :EOF
 :CLEAN
 IF exist %BIN_DIR%   (rmdir %BIN_DIR% /q /s)
 IF exist %BUILD_DIR% (rmdir %BUILD_DIR% /q /s)
-cd %TEST_DIR%
-IF exist %BIN_DIR%   (rmdir %BIN_DIR% /q /s)
-IF exist %BUILD_DIR% (rmdir %BUILD_DIR% /q /s)
+IF exist %TEST_DIR%  (
+    cd %TEST_DIR%
+    IF exist %BIN_DIR% (rmdir %BIN_DIR% /q /s)
+    IF exist %BUILD_DIR% (rmdir %BUILD_DIR% /q /s) 
+)
 goto :EOF
 
 :END
